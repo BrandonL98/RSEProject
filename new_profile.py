@@ -9,14 +9,13 @@ def main ():
 
     if not os.path.exists(name):
         os.makedirs(name)
-        print "[INFO] Profile ", sys.argv[1],  " created "
+        print ("[INFO] Profile ", sys.argv[1],  " created ")
+        if sys.argv[2] == "homeowner":
+            f = open("homeowners.txt", "a+")  
+            f.write('\n')  
+            f.write(sys.argv[1])
     else:    
-        print "[INFO] Profile ", sys.argv[1],  " already exists"
-
-    if sys.argv[2] == "homeowner":
-         f = open("homeowners.txt", "a+")  
-         f.write('\n')  
-         f.write(sys.argv[1])
+        print ("[INFO] Profile ", sys.argv[1],  " already exists")
 
 if __name__ == '__main__':
     main()
