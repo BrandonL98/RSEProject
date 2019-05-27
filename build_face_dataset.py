@@ -15,6 +15,23 @@ ap.add_argument("-c", "--cascade", required=True,
 	help = "path to where the face cascade resides")
 ap.add_argument("-o", "--output", required=True,
 	help="path to output directory")
+ap.add_argument("-ho", "--homeowner", required=True,
+    help="if the photo is for home owner")
+args = vars(ap.parse_args())
+
+# figure out which people it is
+directory_str = args["output"]
+data = directory_str.split("/")
+name = data[1]
+
+# create directory
+is_homeowner = args["homeowner"]
+if(is_homeowner == "True"):
+    cmd = "python new_profile.py " + name + " homeowner"
+else:
+    cmd = "python new_profile.py " + name + " visitor"
+print(cmd)
+os.system(cmd)
 
 args = vars(ap.parse_args())
 
