@@ -27,6 +27,9 @@ def home():
 @app.route("/demo", methods=["GET", "POST"])
 def demo():
 	# construct the argument parser and parse the arguments
+	if request.method == "POST":
+		if request.form["button"] == "back":
+			return redirect(url_for('home'))
 
 	identify_record = {}
 
@@ -156,7 +159,7 @@ def demo():
 	# do a bit of cleanup
 	cv2.destroyAllWindows()
 	vs.stop()
-
+	
 	# check man at door and if he/she is home owner
 	door = "unknown"
 	biggest_val = -1

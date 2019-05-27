@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>RSE Project</title>
+</head>
+
+<body>
+    <h1>Demo</h1>
+    <div>
+    
+        <form method="POST">
+            <button name="button" type="submit" value = "back">Home</button>
+        </form>
+
+        {% if 'unknown' in name %}
+            <p> The person at the door is a stranger </p>
+        {% else %}
+            {% if homeowner %}
+                <p> The home owner {{name}} is at the door </p>
+            {% else %}
+                <p> The visitor {{name}} is at the door </p>
+            {% endif %}
+        {% endif %}
+            
+    </div>
+</body>
+</html>
