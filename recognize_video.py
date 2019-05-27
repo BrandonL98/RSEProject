@@ -132,19 +132,26 @@ while True:
 	key = cv2.waitKey(1) & 0xFF
 
 	# endpoint of flask
-	if proba*100 >= 70 and time_counter == 20:
+	if proba*100 >= 70 and time_counter >= 10:
 		names = str(name)
+
+		# send name through endpoint
 		@app.route("/name")
-		def name():
+		def print_name():
 			return_string = ""
 			return_string = return_string + names
 			return return_string
+		
+		# checks if name is on the homeowner's list
 		@app.route("/")
 		def auth():
-			if names == "unknown":
-				return str(0)
-			else: 
-				return str(1)
+			f = open("homeowners.txt", "r")
+			for line in f:
+				line = line.rstrip()
+				if line == names:
+					return str(1)
+				elif line == '':
+					return str(0)
 		break
 
 	# if the `q` key was pressed, break from the loop
