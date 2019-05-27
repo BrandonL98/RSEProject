@@ -18,6 +18,16 @@ ap.add_argument("-o", "--output", required=True,
 
 args = vars(ap.parse_args())
 
+# figure out which people it is
+directory_str = args["output"]
+data = directory_str.split("/")
+name = data[1]
+
+# create directory
+cmd = "python new_profile.py " + name + " homeowner"
+print(cmd)
+os.system(cmd)
+
 # load OpenCV's Haar cascade for face detection from disk
 detector = cv2.CascadeClassifier(args["cascade"])
 
