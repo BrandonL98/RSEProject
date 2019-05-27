@@ -47,8 +47,9 @@ python train_model.py --embeddings output/embeddings.pickle --recognizer output/
 ### To identify faces from camera
 The following step will open the camera and output the names of people recognized
 
+If the person recognized in the camera is a homeowner (homeowners.txt), the program will output 1 to http://localhost:5000/, otherwise if it is a friend/stranger it will output 0. In addition, it will print the name of the person to http://localhost:5000/name.
 
-**!!! OUTPUT IS STILL TO BE IMPLEMENTED !!!**
+**!!! OUTPUT/DASHBOARD IS STILL IN PROGRESS !!!**
 
 
 ```
