@@ -1,6 +1,6 @@
 # RSEProject - Smart Door Unlock
 
-## Face Detection
+## Face Detection :trollface:
 ### To install opencv 3 on Windows
 Link to step-to-step instructions: 
 https://solarianprogrammer.com/2016/09/17/install-opencv-3-with-python-3-on-windows/
@@ -49,7 +49,7 @@ The following step will open the camera and output the names of people recognize
 
 **!!! OUTPUT IS STILL TO BE IMPLEMENTED !!!**
 
-
+gi
 ```
 python recognize_video.py --detector face_detection_model --embedding-model openface_nn4.small2.v1.t7 --recognizer output/recognizer.pickle --le output/le.pickle
 ```
