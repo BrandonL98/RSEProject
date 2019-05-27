@@ -29,21 +29,6 @@ Press Q to quit
 If ran successfully, the program should assure that the folder with the name of faces exist in dataset directory. If the person is the homeowner, the name will also be written to "homeowners.txt"
 
 
-### To train machine for recognizing faces
-
-The steps follow do the training for face recognizing:
-```
-python extract_embeddings.py --dataset dataset --
-embeddings output/embeddings.pickle --detector face_detection_model --embedding-model openface_nn4.small2.v1.t7
-```
-
-
-After this is ran successfully run:
-```
-python train_model.py --embeddings output/embeddings.pickle --recognizer output/recognizer.pickle --le output/le.pickle
-```
-
-
 ### To identify faces from camera
 The following step will open the camera and output the names of people recognized
 
@@ -52,7 +37,7 @@ python recognize_video.py --detector face_detection_model --embedding-model open
 ```
 
 
-This will open up a web page: 127.0.0.1:8000 , which is the home page
+This will train the computer to recognize faces and open up a web page: **127.0.0.1:8000** , which is the home page
 
 To continue: click start button, this will take you to demo page
 
