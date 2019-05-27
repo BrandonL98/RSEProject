@@ -22,6 +22,7 @@ python build_face_dataset.py --cascade haarcascade_frontalface_default.xml --out
 ```
 
 Press K to capture faces
+
 Press Q to quit
 
 
