@@ -50,7 +50,7 @@ The following step will open the camera and output the names of people recognize
 
 **!!! OUTPUT IS STILL TO BE IMPLEMENTED !!!**
 
-gi
+
 ```
 python recognize_video.py --detector face_detection_model --embedding-model openface_nn4.small2.v1.t7 --recognizer output/recognizer.pickle --le output/le.pickle
 ```
