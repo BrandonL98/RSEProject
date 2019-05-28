@@ -1,8 +1,11 @@
 def open_lock():
-    pass
+    f = open("lock.txt","w+")
+    f.write("Unlocked")
 
 def lock_lock():
-    pass
+    f = open("lock.txt","w+")
+    f.write("Locked")
 
 def check_lock_status():
-    pass
+    f = open("lock.txt","r")
+    return f.readline()

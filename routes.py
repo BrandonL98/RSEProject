@@ -52,10 +52,11 @@ def lock():
 
 @app.route('/update_lock/<state>', methods=["PUT"])
 def update_lock(state):
-    if (state == "open"):
+    if (state == 'open'):
         lock_module.open_lock()
-    if (state == "lock"):
+    if (state == 'lock'):
         lock_module.lock_lock()
+    return state
 
 if __name__ == '__main__':
     app.run(debug=True, port = 8000)
