@@ -2,7 +2,6 @@
 # python recognize_video.py --detector face_detection_model --embedding-model openface_nn4.small2.v1.t7 --recognizer output/recognizer.pickle --le output/le.pickle
 
 # import the necessary packages
-from flask import Flask, render_template, request, redirect, url_for, abort, session
 from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
@@ -13,63 +12,26 @@ import time
 import cv2
 import os
 
-app = Flask(__name__)
-
-@app.route("/", methods=["GET", "POST"])
-@app.route("/home", methods=["GET", "POST"])
-def home():
-	if request.method == "POST":
-		if request.form["button"] == "start":
-			return redirect(url_for('demo'))
-	else:
-		return render_template('home.html')
-
-@app.route("/demo", methods=["GET", "POST"])
-def demo():
-	# construct the argument parser and parse the arguments
-	if request.method == "POST":
-		if request.form["button"] == "back":
-			return redirect(url_for('home'))
-	
-	ap = argparse.ArgumentParser()
-	ap.add_argument("-d", "--detector", required=True,
-		help="path to OpenCV's deep learning face detector")
-	ap.add_argument("-m", "--embedding-model", required=True,
-		help="path to OpenCV's deep learning face embedding model")
-	ap.add_argument("-r", "--recognizer", required=True,
-		help="path to model trained to recognize faces")
-	ap.add_argument("-l", "--le", required=True,
-		help="path to label encoder")
-	ap.add_argument("-c", "--confidence", type=float, default=0.5,
-		help="minimum probability to filter weak detections")
-	ap.add_argument("-rl", "--relearn", required=True,
-		help="if there is photo to be relearned")
-	args = vars(ap.parse_args())
-
-	need_to_learn = args["relearn"]
-
-	identify_record = {}
+def process_video(need_to_learn, detector, embedding_model, recognizer, le, expected_confidence):
 
 	if (need_to_learn == "True"):
-
 		os.system("python extract_embeddings.py --dataset dataset --embeddings output/embeddings.pickle --detector face_detection_model --embedding-model openface_nn4.small2.v1.t7")
 		os.system("python train_model.py --embeddings output/embeddings.pickle --recognizer output/recognizer.pickle --le output/le.pickle")
 
-
 	# load our serialized face detector from disk
 	print("[INFO] loading face detector...")
-	protoPath = os.path.sep.join([args["detector"], "deploy.prototxt"])
-	modelPath = os.path.sep.join([args["detector"],
+	protoPath = os.path.sep.join([detector, "deploy.prototxt"])
+	modelPath = os.path.sep.join([detector,
 		"res10_300x300_ssd_iter_140000.caffemodel"])
 	detector = cv2.dnn.readNetFromCaffe(protoPath, modelPath)
 
 	# load our serialized face embedding model from disk
 	print("[INFO] loading face recognizer...")
-	embedder = cv2.dnn.readNetFromTorch(args["embedding_model"])
+	embedder = cv2.dnn.readNetFromTorch(embedding_model)
 
 	# load the actual face recognition model along with the label encoder
-	recognizer = pickle.loads(open(args["recognizer"], "rb").read())
-	le = pickle.loads(open(args["le"], "rb").read())
+	recognizer = pickle.loads(open(recognizer, "rb").read())
+	le = pickle.loads(open(le, "rb").read())
 
 	# initialize the video stream, then allow the camera sensor to warm up
 	print("[INFO] starting video stream...")
@@ -78,6 +40,8 @@ def demo():
 
 	# start the FPS throughput estimator
 	fps = FPS().start()
+
+	identify_record = {}
 
 	# loop over frames from the video file stream
 	while True:
@@ -107,7 +71,7 @@ def demo():
 			confidence = detections[0, 0, i, 2]
 
 			# filter out weak detections
-			if confidence > args["confidence"]:
+			if confidence > expected_confidence:
 				# compute the (x, y)-coordinates of the bounding box for
 				# the face
 				box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -169,24 +133,5 @@ def demo():
 	# do a bit of cleanup
 	cv2.destroyAllWindows()
 	vs.stop()
-	
-	# check man at door and if he/she is home owner
-	door = "unknown"
-	biggest_val = -1
-	for key,val in identify_record.items():
-		if val > biggest_val:
-			door = key
-			biggest_val = val
 
-	f = open("homeowners.txt", "r")
-	for line in f:
-		line = line.rstrip()
-		if line == door:
-			return render_template('demo.html', name=door, homeowner="True")
-		elif line == '':
-			return render_template('demo.html', name=door)
-	
-	return render_template('demo.html', name=door)
-
-if __name__ == '__main__':
-    app.run(debug=True, port = 8000)
+	return identify_record
