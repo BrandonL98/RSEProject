@@ -48,9 +48,9 @@ def camera():
 @app.route("/lock")
 def lock():
 	state = lock_module.check_lock_status()
-	return state
+	return render_template('lock.html', lock_status = state)
 
-@app.route('/update_lock/<state>', methods=["GET","PUT"])
+@app.route('/update_lock/<state>', methods=["PUT"])
 def update_lock(state):
     if (state == "open"):
         lock_module.open_lock()

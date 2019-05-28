@@ -9,18 +9,10 @@
     <h1>Lock</h1>
     <div>
     
-        <form method="PUT">
-            <button name="button" type="submit" value = "back">Home</button>
-        </form>
-
-        {% if 'unknown' in name %}
-            <p> The person at the door is a stranger </p>
+        {% if 'Locked' in lock_status %}
+            <p> The door is locked </p>
         {% else %}
-            {% if homeowner %}
-                <p> The home owner {{name}} is at the door </p>
-            {% else %}
-                <p> The visitor {{name}} is at the door </p>
-            {% endif %}
+            <p> The door is unlocked </p>
         {% endif %}
             
     </div>
