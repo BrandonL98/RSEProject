@@ -5,3 +5,5 @@ Write names below on a new line exactly as it appears in the database folders
 brandon
 winston
 ann
+joann
+cindy

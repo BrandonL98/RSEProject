@@ -30,12 +30,7 @@ def demo():
 	if request.method == "POST":
 		if request.form["button"] == "back":
 			return redirect(url_for('home'))
-
-	identify_record = {}
-
-	os.system("python extract_embeddings.py --dataset dataset --embeddings output/embeddings.pickle --detector face_detection_model --embedding-model openface_nn4.small2.v1.t7")
-	os.system("python train_model.py --embeddings output/embeddings.pickle --recognizer output/recognizer.pickle --le output/le.pickle")
-
+	
 	ap = argparse.ArgumentParser()
 	ap.add_argument("-d", "--detector", required=True,
 		help="path to OpenCV's deep learning face detector")
@@ -47,7 +42,19 @@ def demo():
 		help="path to label encoder")
 	ap.add_argument("-c", "--confidence", type=float, default=0.5,
 		help="minimum probability to filter weak detections")
+	ap.add_argument("-rl", "--relearn", required=True,
+		help="if there is photo to be relearned")
 	args = vars(ap.parse_args())
+
+	need_to_learn = args["relearn"]
+
+	identify_record = {}
+
+	if (need_to_learn == "True"):
+
+		os.system("python extract_embeddings.py --dataset dataset --embeddings output/embeddings.pickle --detector face_detection_model --embedding-model openface_nn4.small2.v1.t7")
+		os.system("python train_model.py --embeddings output/embeddings.pickle --recognizer output/recognizer.pickle --le output/le.pickle")
+
 
 	# load our serialized face detector from disk
 	print("[INFO] loading face detector...")
