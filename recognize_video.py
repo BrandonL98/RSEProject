@@ -185,6 +185,8 @@ def demo():
 			return render_template('demo.html', name=door, homeowner="True")
 		elif line == '':
 			return render_template('demo.html', name=door)
+	
+	return render_template('demo.html', name=door)
 
 if __name__ == '__main__':
     app.run(debug=True, port = 8000)
