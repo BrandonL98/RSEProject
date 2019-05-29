@@ -14,6 +14,19 @@ When encountering error about the package not being recognized do:
 python -m pip install <package name>
 ```
 
+### Simplified
+The following step will create a local host webpage that has access to the rest of the features below.
+```
+python routes.py --relearn <True/False>
+```
+
+relearn True -> will run the learning image process
+relearn False -> will skip the learning image process
+
+The webpage loaded can be accessed through this URL
+```
+http://127.0.0.1:8000
+```
 
 ### To add faces to dataset
 The following steps allow the homeowner to add new pictures of faces to dataset:
