@@ -35,6 +35,8 @@ def camera():
 
     door = json_operations.readFromJSONFile('whos_at_door')
 
+    lock_module.lock_logic()
+
     # check man at door and if he/she is home owner
     return render_template('demo.html', name=list(door.keys())[0])
 

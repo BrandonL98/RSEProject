@@ -127,8 +127,6 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 		if key == ord("q"):
 			break
 
-		print('Run')
-
 		info_processing.process_camera_detection(identify_record)
 		identify_record = {}
 
