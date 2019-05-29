@@ -144,6 +144,7 @@ h2 {
 	color: #FFFFFF;
 	border-radius: 12px;
 	padding: 5px 16px;
+	cursor: pointer;
 }
 
 .back-button {
@@ -159,6 +160,7 @@ h2 {
 	color: #FFFFFF;
 	border-radius: 12px;
 	padding: 10px 32px;
+	cursor: pointer;
 }
 
 footer {
