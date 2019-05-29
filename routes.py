@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, session
 import recognize_video
+import build_face_dataset
 import lock_module
 import json_operations
 
@@ -57,9 +58,28 @@ def user():
             return redirect(url_for('camera'))
         elif request.form["button"] == 'back':
             return redirect(url_for('home'))
+        elif request.form["button"] == 'add':
+            return redirect(url_for('add'))
+            
     else: 
-	    state = lock_module.check_lock_status()
-	    return render_template('lock.html', lock_status = state)
+        state = lock_module.check_lock_status()
+        return render_template('lock.html', lock_status = state)
+
+@app.route("/add", methods=["GET", "POST"])
+def add():
+    if request.method == "POST":
+        if request.form["button"] == 'add':
+            text = request.form['name']
+            low_text = text.lower()
+            names = "dataset/" + low_text
+            build_face_dataset.add_user("haarcascade_frontalface_default.xml", names, "False")
+        elif request.form["button"] == 'add2':
+            text = request.form['name']
+            low_text = text.lower()
+            names = "dataset/" + low_text
+            build_face_dataset.add_user("haarcascade_frontalface_default.xml", names, "True")
+
+    return render_template('add.html')
 
 @app.route("/lock")
 def lock():

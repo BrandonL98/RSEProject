@@ -75,68 +75,26 @@ header {
 	padding: 15em 5em 3em;
 }
 
-.lock {
+.door {
 	position: relative;
+}
+
+.door-text {
 	color: #343144;
 	background: #fff;
-	padding: 1em 6em 2em;
-}
-
-.lock-button1 {
-	margin-top: 1em;
-	margin-left: 11.8em;
-	font-family: 'acumin-pro-extra-condensed', sans-serif;
-	text-transform: uppercase;
-	font-size: 2.5vw;
-	letter-spacing: .2em;
+	padding: 6em 6em 0em;
 	text-align: center;
-	display: inline-block;
-	border: none;
-	background-color: #3A495C;
-	color: #FFFFFF;
-	border-radius: 12px;
-	padding: 10px 46px;
 }
 
-.lock-button2 {
-	font-family: 'acumin-pro-extra-condensed', sans-serif;
-	text-transform: uppercase;
-	margin-left: 1em;
-	font-size: 2.5vw;
-	letter-spacing: .2em;
+.door-desc {
+	color: #343144;
+	background: #fff;
+	padding-top: 2em;
+	padding-bottom: 1em;
+	padding-left: 22em;
 	text-align: center;
-	display: inline-block;
-	border: none;
-	background-color: #3A495C;
-	color: #FFFFFF;
-	border-radius: 12px;
-	padding: 10px 32px;
-}
-
-.lock-content {
-	position: relative;
-}
-
-.lock p {
-	font-family: 'acumin-pro-extra-condensed', sans-serif;
-	font-size: 2.5em;
-	line-height: 1.8;
-	position: relative;
-	z-index: 200;
-	text-align: center;
-	letter-spacing: .325em;
-	text-transform: uppercase;
-}
-
-.lock figure {
-	position: relative;
-}
-
-.lock figure img {
-	padding: 0em 7.5em 0em 32.5em;
-	width: 70%;
-	position: relative;
-	z-index: 100;
+	max-width: 60em;
+	font-size: 1.2vw;
 }
 
 h1 {
@@ -155,49 +113,29 @@ h2 {
 	font-weight: 100;
 	font-size: 2em;
     line-height: 2.2;
-	margin-bottom: 1em;
-	padding-top: 2em;
 	letter-spacing: .3em;
 	text-transform: uppercase;
 	text-shadow: 0px 0px 8px rgba(0, 0, 0,.2);
 }
 
-.camera {
-	position: relative;
-	color: #343144;
-	background: #fff;
-	padding: 1em 6em 0em;
-}
-
-.camera-button {
-	margin-left: 14.5em;
-	margin-bottom: 1em;
-	font-family: 'acumin-pro-extra-condensed', sans-serif;
-	text-transform: uppercase;
-	font-size: 2.5vw;
-	letter-spacing: .2em;
-	text-align: center;
-	display: inline-block;
-	border: none;
-	background-color: #3A495C;
-	color: #FFFFFF;
-	border-radius: 12px;
-	padding: 10px 32px;
-}
-
 .add {
-	position: relative;
-	color: #343144;
 	background: #fff;
-	padding: 1em 6em 0em;
+	padding: 0em 0em 5em;	
+	text-align: center;
+}
+
+.name-box {
+	margin-top: 1em;
+	padding: 10px 10px;
+	display: inline-block;
 }
 
 .add-button {
-	margin-left: 14.4em;
-	margin-bottom: 3em;
+	margin-top: 1em;
+	margin-left: 1.5em;
 	font-family: 'acumin-pro-extra-condensed', sans-serif;
 	text-transform: uppercase;
-	font-size: 2.5vw;
+	font-size: 1vw;
 	letter-spacing: .2em;
 	text-align: center;
 	display: inline-block;
@@ -205,7 +143,7 @@ h2 {
 	background-color: #3A495C;
 	color: #FFFFFF;
 	border-radius: 12px;
-	padding: 10px 30px;
+	padding: 5px 16px;
 }
 
 .back-button {
@@ -230,6 +168,7 @@ footer {
 	background-image: -webkit-linear-gradient( 135deg, rgb(160,55,220) 0%, rgb(83,200,234) 100%);
 	background-image: -ms-linear-gradient( 135deg, rgb(160,55,220) 0%, rgb(83,200,234) 100%);
 }
+
 .footer-content {
 	width: 64%;
 	margin: 0 auto;
