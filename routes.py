@@ -13,6 +13,14 @@ import os
 
 app = Flask(__name__)
 
+@app.route("/", methods=["GET", "POST"])
+def home():
+	if request.method == "POST":
+		if request.form["button"] == "start":
+			return redirect(url_for('user'))
+	else:
+		return render_template('home.html')
+
 @app.route("/camera")
 def camera():
 
@@ -39,16 +47,29 @@ def camera():
     for line in f:
         line = line.rstrip()
         if line == door:
+            lock_module.open_lock()
             return render_template('demo.html', name=door, homeowner="True")
         elif line == '':
             return render_template('demo.html', name=door)
 	
     return render_template('demo.html', name=door)
 
-@app.route("/lock")
-def lock():
-	state = lock_module.check_lock_status()
-	return render_template('lock.html', lock_status = state)
+@app.route("/user", methods=["GET", "POST"])
+def user():
+    if request.method == "POST":
+        if request.form["button"] == "lock":
+            lock_module.lock_lock()
+            return redirect(url_for('user'))
+        elif request.form["button"] == "unlock":
+            lock_module.open_lock()
+            return redirect(url_for('user'))
+        elif request.form["button"] == 'camera':
+            return redirect(url_for('camera'))
+        elif request.form["button"] == 'back':
+            return redirect(url_for('home'))
+    else: 
+	    state = lock_module.check_lock_status()
+	    return render_template('lock.html', lock_status = state)
 
 @app.route('/update_lock/<state>', methods=["PUT"])
 def update_lock(state):
