@@ -12,6 +12,8 @@ import time
 import cv2
 import os
 
+import info_processing
+
 def process_video(need_to_learn, detector, embedding_model, recognizer, le, expected_confidence):
 
 	if (need_to_learn == "True"):
@@ -125,6 +127,13 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 		if key == ord("q"):
 			break
 
+		print('Run')
+
+		info_processing.process_camera_detection(identify_record)
+		identify_record = {}
+
+		time.sleep(2)
+
 	# stop the timer and display FPS information
 	fps.stop()
 	print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
@@ -133,5 +142,3 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 	# do a bit of cleanup
 	cv2.destroyAllWindows()
 	vs.stop()
-
-	return identify_record

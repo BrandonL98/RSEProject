@@ -13,15 +13,7 @@
             <button name="button" type="submit" value = "back">Home</button>
         </form>
 
-        {% if 'unknown' in name %}
-            <p> The person at the door is a stranger </p>
-        {% else %}
-            {% if homeowner %}
-                <p> The home owner {{name}} is at the door </p>
-            {% else %}
-                <p> The visitor {{name}} is at the door </p>
-            {% endif %}
-        {% endif %}
+        <p> The person {{name}} is at the door </p>
             
     </div>
 </body>
