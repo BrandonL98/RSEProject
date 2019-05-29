@@ -1,20 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
     <title>RSE Project</title>
+    
+    <script src="https://use.typekit.net/kxf0iwn.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+
+    <link type='text/css' href='{{ url_for('static', filename='style_camera.css') }}' rel='stylesheet'>
+	<!link type='text/css' href='style_camera.css' rel='stylesheet'>
 </head>
 
 <body>
-    <h1>Demo</h1>
-    <div>
-    
-        <form method="POST">
-            <button name="button" type="submit" value = "back">Home</button>
-        </form>
+	<header>
+		<nav class="site-nav">
+			<ul>
+				<li><a href="home">Home</a></li>
+				<li><a href="user">User</a></li>
+				<li><a href="camera">Camera</a></li>
+			</ul>
+		</nav>
+	</header>
+	<main>
+		<section class="title">
+			<h1>Demo</h1>
+		</section>
 
-        <p> The person {{name}} is at the door </p>
-            
-    </div>
+		<section class="door">
+			<div class="door-text">
+				<h2> The person {{name}} is at the door </h2>
+			</div>
+			<form method="POST">
+				<button class="back-button" name="button" type="submit" value = "back">Back</button>
+			</form>
+
+
+		</section>
+	</main>
+	
+	<footer>
+    <div class="footer-content">
+            <div class="footer-info">
+                <p class="footer-disclaimer">This is a mock website. There is nothing to see down here, please scroll all the way back up. Any references to real products are purely coincidental, designed as part of the STEM Leaders' Project.</p>
+                <p class="footer-legal">2019 Test Systems Incorporated. Fictional rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+	
 </body>
 </html>
