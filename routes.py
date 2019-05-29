@@ -96,5 +96,9 @@ def update_lock(state):
         lock_module.lock_lock()
     return state
 
+@app.route('/homeowner', methods=['GET','POST'])
+def homeowner():
+    
+
 if __name__ == '__main__':
     app.run(debug=True, port = 8000)
