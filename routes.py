@@ -7,6 +7,10 @@ import argparse
 
 app = Flask(__name__)
 
+@app.route("/")
+def start():
+	return redirect(url_for('home'))
+
 @app.route("/", methods=["GET", "POST"])
 def home():
 	if request.method == "POST":
