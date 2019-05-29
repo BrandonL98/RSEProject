@@ -78,7 +78,9 @@ def add():
             low_text = text.lower()
             names = "dataset/" + low_text
             build_face_dataset.add_user("haarcascade_frontalface_default.xml", names, "True")
-
+        elif request.form["button"] == 'back':
+            return redirect(url_for('user'))
+		
     return render_template('add.html')
 
 @app.route("/lock")
