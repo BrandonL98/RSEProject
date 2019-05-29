@@ -11,7 +11,7 @@ app = Flask(__name__)
 def start():
 	return redirect(url_for('home'))
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/home", methods=["GET", "POST"])
 def home():
 	if request.method == "POST":
 		if request.form["button"] == "start":
