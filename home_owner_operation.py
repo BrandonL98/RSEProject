@@ -1,9 +1,14 @@
+def add_owner(names):
+    f = open("homeowners.txt", "a+")  
+    f.write('\n')  
+    f.write(names)
+
 def print_owners():
     f = open("homeowners.txt", "r")
     output_string = ""
     for line in f:
         line = line.rstrip()  
-        output_string = output_string + line + "\n"
+        output_string = output_string + line + '\n'
     
     return output_string
     

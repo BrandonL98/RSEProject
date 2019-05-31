@@ -10,7 +10,7 @@
     <script src="https://use.typekit.net/kxf0iwn.js"></script>
     <script>try{Typekit.load({ async: true });}catch(e){}</script>
 
-    <link type='text/css' href='{{ url_for('static', filename='style.css') }}' rel='stylesheet'>
+    <link type='text/css' href='{{ url_for('static', filename='style_remove.css') }}' rel='stylesheet'>
 
 </head>
 
@@ -20,7 +20,8 @@
         <nav class="site-nav">
             <ul>
                 <li><a href="home">Home</a></li>
-                <li><a href="user">User</a></li>
+                <li><a href="user">Dashboard</a></li>
+				<li><a href="add">Users</a></li>
                 <li><a href="camera">Camera</a></li>
             </ul>
         </nav>
@@ -28,30 +29,46 @@
 	
 	<main>
 		<section class="title">
-            <h1>List of Current Homeowners</h1>
+            <h1>Homeowners</h1>
         </section>
         
         <section class="intro">
+			<h2>List of current homeowners</h2>
             <div class="intro-text">
-                <p>{{homeowners}}</p><br>
-                <p2>Delete User:</p2><br>
+                <pre>{{homeowners}}</pre><br>
+			</div>
+		</section>
+		
+		<section class="content">
+			<div class="content-add">
+				<form method="POST">
+					<input name="name" class="name-box">
+					<button class="add-button" name="button" type="submit" value = "add">Add Homeowner</button>
+				</form>
+			</div>
+			
+			<div class="content-text">
                 <form class="form-group" method="POST">
                     <select class="custom-select" name="owner" placeholder="Choose homeowner to delete" value="{{line}}"><br>
                         {% for line in lines %}
                             <option value="{{line}}">{{line}}</option>
                         {% endfor %}
-                    </select>
-                    <button type="submit">Delete</button>
-                </form>
-            </div>
-        </section>
+					</select>							
+					<button type="submit" class="content-button" value="delete" name="button">Delete Homeowner</button>
+				</form>
+			</div>
+		</section>
+
+		<form method="POST">
+			<button class="back-button" name="button" type="submit" value = "back">Back</button>
+		</form>		
 
     </main>
 		
 	<footer>
     <div class="footer-content">
             <div class="footer-info">
-                <p class="footer-disclaimer">This is a mock website. There is nothing to see down here, please scroll all the way back up. Any references to real products are purely coincidental, designed as part of the STEM Leaders' Project.</p>
+                <p class="footer-disclaimer">This is a mock website. Any references to real products are purely coincidental, designed as part of the STEM Leaders' Project. All images belong to their respective copyright owners.</p>
                 <p class="footer-legal">2019 Test Systems Incorporated. Fictional rights reserved.</p>
             </div>
         </div>

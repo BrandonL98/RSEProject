@@ -61,6 +61,8 @@ def user():
             return redirect(url_for('home'))
         elif request.form["button"] == 'add':
             return redirect(url_for('add'))
+        elif request.form["button"] == 'remove':
+            return redirect(url_for('homeowner'))
             
     else: 
         state = lock_module.check_lock_status()
@@ -106,14 +108,21 @@ def homeowner():
         f = map(lambda s: s.strip(), f)
         return render_template('homeowner.html', homeowners = p_list, lines = f)
     if request.method == "POST":
-        # delete the name input into the field
-        del_name = request.form['owner']
-        print(del_name)
-        home_owner_operation.delete_owner(del_name)
-        f = open("homeowners.txt", "r")
-        f = map(lambda s: s.strip(), f)
-
-        return render_template('homeowner.html', homeowners = p_list, lines = f)
+        if request.form["button"] == 'add':
+            text = request.form['name']
+            low_text = text.lower()
+            home_owner_operation.add_owner(low_text)
+            return redirect(url_for('homeowner'))
+        elif request.form["button"] == 'delete':
+            # delete the name input into the field
+            del_name = request.form['owner']
+            print(del_name)
+            home_owner_operation.delete_owner(del_name)
+            f = open("homeowners.txt", "r")
+            f = map(lambda s: s.strip(), f)
+            return redirect(url_for('homeowner'))
+        elif request.form["button"] == 'back':
+            return redirect(url_for('user'))
     
 if __name__ == '__main__':
         app.run(debug=True, port = 8000)
