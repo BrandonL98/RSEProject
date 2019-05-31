@@ -3,6 +3,7 @@ import recognize_video
 import build_face_dataset
 import lock_module
 import json_operations
+import home_owner_operation
 
 import argparse
 
@@ -98,7 +99,21 @@ def update_lock(state):
 
 @app.route('/homeowner', methods=['GET','POST'])
 def homeowner():
-    
+    # return a list of homeowners
+    p_list = home_owner_operation.print_owners()
+    if request.method == "GET":
+        f = open("homeowners.txt", "r")
+        f = map(lambda s: s.strip(), f)
+        return render_template('homeowner.html', homeowners = p_list, lines = f)
+    if request.method == "POST":
+        # delete the name input into the field
+        del_name = request.form['owner']
+        print(del_name)
+        home_owner_operation.delete_owner(del_name)
+        f = open("homeowners.txt", "r")
+        f = map(lambda s: s.strip(), f)
 
+        return render_template('homeowner.html', homeowners = p_list, lines = f)
+    
 if __name__ == '__main__':
-    app.run(debug=True, port = 8000)
+        app.run(debug=True, port = 8000)
