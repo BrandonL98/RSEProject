@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>RSE Project</title>
+    
+    <script src="https://use.typekit.net/kxf0iwn.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+
+    <link type='text/css' href='{{ url_for('static', filename='style.css') }}' rel='stylesheet'>
+
+</head>
+
+<body>
+	
+	<header>
+        <nav class="site-nav">
+            <ul>
+                <li><a href="home">Home</a></li>
+                <li><a href="user">User</a></li>
+                <li><a href="camera">Camera</a></li>
+            </ul>
+        </nav>
+    </header>
+	
+	<main>
+		<section class="title">
+            <h1>List of Current Homeowners</h1>
+        </section>
+        
+        <section class="intro">
+            <div class="intro-text">
+                <p>{{homeowners}}</p><br>
+                <p2>Delete User:</p2><br>
+                <form class="form-group" method="POST">
+                    <select class="custom-select" name="owner" placeholder="Choose homeowner to delete" value="{{line}}"><br>
+                        {% for line in lines %}
+                            <option value="{{line}}">{{line}}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+		
+	<footer>
+    <div class="footer-content">
+            <div class="footer-info">
+                <p class="footer-disclaimer">This is a mock website. There is nothing to see down here, please scroll all the way back up. Any references to real products are purely coincidental, designed as part of the STEM Leaders' Project.</p>
+                <p class="footer-legal">2019 Test Systems Incorporated. Fictional rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+	
+</body>
+</html>
