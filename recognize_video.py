@@ -11,8 +11,7 @@ import pickle
 import time
 import cv2
 import os
-
-import info_processing
+import json_operations
 
 def process_video(need_to_learn, detector, embedding_model, recognizer, le, expected_confidence):
 
@@ -43,7 +42,10 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 	# start the FPS throughput estimator
 	fps = FPS().start()
 
-	identify_record = {}
+	# loop counters
+	time_counter = 0
+	name_probability = {}
+	dictCounter = 0
 
 	# loop over frames from the video file stream
 	while True:
@@ -101,11 +103,13 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 				proba = preds[j]
 				name = le.classes_[j]
 
-				name_str = str(name)
-				if name_str in identify_record:
-					identify_record[name_str] = identify_record[name_str] + proba
-				else:
-					identify_record[name_str] = proba
+				# remember names/probability
+				if time_counter % 1 == 0:
+					if (name in name_probability):
+						name_probability[name] += proba
+					else:
+						name_probability[name] = proba	
+					dictCounter += 1
 
 				# draw the bounding box of the face along with the
 				# associated probability
@@ -119,6 +123,9 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 		# update the FPS counter
 		fps.update()
 
+		# counter increase
+		time_counter = time_counter + 1
+
 		# show the output frame
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
@@ -127,10 +134,11 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 		if key == ord("q"):
 			break
 
-		info_processing.process_camera_detection(identify_record)
-		identify_record = {}
+	# save to a json file
+	for name in name_probability:
+		name_probability[name] = name_probability[name]/dictCounter
 
-		time.sleep(2)
+	json_operations.writeToJSONFile('people_count', name_probability)
 
 	# stop the timer and display FPS information
 	fps.stop()
