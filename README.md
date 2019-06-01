@@ -17,7 +17,7 @@ python -m pip install <package name>
 ### Install dependencies
 Essentials for facial recognition
 ```
-python -m pip install -upgrade imutils
+python -m pip install --upgrade imutils
 ```
 ```
 python -m pip install scikit-learn
