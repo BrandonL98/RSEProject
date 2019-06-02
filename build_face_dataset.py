@@ -75,5 +75,10 @@ def add_user(cascade, output, homeowner):
 	# do a bit of cleanup
 	print("[INFO] {} face images stored".format(total))
 	print("[INFO] cleaning up...")
+
+	os.system("python extract_embeddings.py --dataset dataset --embeddings output/embeddings.pickle --detector face_detection_model --embedding-model openface_nn4.small2.v1.t7")
+	os.system("python train_model.py --embeddings output/embeddings.pickle --recognizer output/recognizer.pickle --le output/le.pickle")
+
+
 	cv2.destroyAllWindows()
 	vs.stop()
