@@ -9,6 +9,12 @@ import argparse
 
 app = Flask(__name__)
 
+state = lock_module.check_lock_status()
+if state == 'Lock':
+    requests.post('http://3.19.39.220/lock', data={'lock':'true'})
+else:
+    requests.post('http://3.19.39.220/lock', data={'lock':'false'})
+
 @app.route("/")
 def start():
 	return redirect(url_for('home'))
@@ -54,13 +60,14 @@ def camera():
         for names in actualDoor:
             if (line == names):
                 lock_module.open_lock()
-                requests.post('http://3.19.39.220/lock', {"lock":"unlock"})
+                requests.post('http://3.19.39.220/lock', data={'lock':'false'})
 
     # convert list to string
     stringname = ",".join(actualDoor)
     print(stringname)
 
-    requests.post('http://3.19.39.220/names', {"name":stringname})
+    requests.post('http://3.19.39.220/names', data={'name':stringname})
+    
 
     # check man at door and if he/she is home owner
     return render_template('demo.html', name=stringname)
@@ -70,11 +77,11 @@ def user():
     if request.method == "POST":
         if request.form["button"] == "lock":
             lock_module.lock_lock()
-            requests.post('http://3.19.39.220/lock', {"lock":"lock"})
+            requests.post('http://3.19.39.220/lock', data={'lock':'true'})
             return redirect(url_for('user'))
         elif request.form["button"] == "unlock":
             lock_module.open_lock()
-            requests.post('http://3.19.39.220/lock', {"lock":"unlock"})
+            requests.post('http://3.19.39.220/lock', data={'lock':'false'})
             return redirect(url_for('user'))
         elif request.form["button"] == 'camera':
             return redirect(url_for('camera'))
