@@ -42,11 +42,16 @@
                     	<img src="static/locked.png">
                     </figure>
 					<p> The door is locked </p>
-				{% else %}
+				{% elif 'Unlocked' in lock_status %}
 					<figure>
                     	<img src="static/unlocked.png">
                     </figure>
 					<p> The door is unlocked </p>
+				{% elif 'disconnected' in lock_status %}
+					<figure>
+						<img src="static/disconnected.png">
+					</figure>
+					<p> Connection Lost </p>
 				{% endif %}
 			</div>
 				<form method="POST">
