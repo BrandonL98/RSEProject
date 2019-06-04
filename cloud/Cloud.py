@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, session, jsonify
+from threading import Timer
 import lock_module
-import time
+
 
 app = Flask(__name__)
 
@@ -27,6 +28,8 @@ def lockDoor():
         elif lockState == 'false':
             print(lockState)
             lock_module.open_lock()
+            t = Timer(10.0, changelock)
+            t.start()
         return lockState
     else:
         state = lock_module.check_lock_status()
@@ -39,6 +42,9 @@ def lockDoor():
 def status():
     state = lock_module.check_lock_status()
     return jsonify({"lock":state})
+
+def changelock():
+    lock_module.lock_lock()
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80)
