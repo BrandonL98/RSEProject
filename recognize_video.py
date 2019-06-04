@@ -12,6 +12,7 @@ import time
 import cv2
 import os
 import json_operations
+import requests
 
 def process_video(need_to_learn, detector, embedding_model, recognizer, le, expected_confidence):
 
@@ -46,6 +47,7 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 	time_counter = 0
 	name_probability = {}
 	dictCounter = 0
+	sentCounter = 0
 
 	# loop over frames from the video file stream
 	while True:
@@ -111,6 +113,39 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 						name_probability[name] = proba	
 					dictCounter += 1
 
+				# sends post after a timeframe has passed
+				if time_counter % 20 == 0:
+					for name in name_probability:
+						name_probability[name] = name_probability[name]/dictCounter
+
+					json_operations.writeToJSONFile('people_count', name_probability)
+					name_probability.clear()
+					dictCounter = 0
+
+					door = json_operations.readFromJSONFile('people_count')
+
+					# only takes names with probability higher than [0.x]
+					actualDoor = []
+					for name in door:
+						if (door[name] > 0.05):
+							actualDoor.append(name)
+
+					# check if identified names are homeowners, if so unlock door
+					f = open("homeowners.txt", "r")
+					for line in f:
+						line = line.rstrip()
+						for names in actualDoor:
+							if (line == names):
+								requests.post('http://3.19.39.220/lock', params={'lock':'false'})
+
+					# convert list to string
+					stringname = ",".join(actualDoor)
+					print(stringname)
+
+					requests.post('http://3.19.39.220/names', params={'name':stringname})
+					
+					sentCounter = 1
+
 				# draw the bounding box of the face along with the
 				# associated probability
 				text = "{}: {:.2f}%".format(name, proba * 100)
@@ -119,6 +154,13 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 					(0, 0, 255), 2)
 				cv2.putText(frame, text, (startX, y),
 					cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+
+		# no one at the door
+		if sentCounter == 0 and time_counter % 20 == 0:
+			print('no one')
+			requests.post('http://3.19.39.220/names', params={'name':'empty'})
+		elif sentCounter == 1 and time_counter % 20 == 0:
+			sentCounter = 0
 
 		# update the FPS counter
 		fps.update()
@@ -133,12 +175,6 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 		# if the `q` key was pressed, break from the loop
 		if key == ord("q"):
 			break
-
-	# save to a json file
-	for name in name_probability:
-		name_probability[name] = name_probability[name]/dictCounter
-
-	json_operations.writeToJSONFile('people_count', name_probability)
 
 	# stop the timer and display FPS information
 	fps.stop()

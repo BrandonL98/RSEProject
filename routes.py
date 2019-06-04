@@ -1,19 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, session
 import recognize_video
 import build_face_dataset
-import lock_module
 import json_operations
 import home_owner_operation
 import requests
 import argparse
 
 app = Flask(__name__)
-
-state = lock_module.check_lock_status()
-if state == 'Lock':
-    requests.post('http://3.19.39.220/lock', data={'lock':'true'})
-else:
-    requests.post('http://3.19.39.220/lock', data={'lock':'false'})
 
 @app.route("/")
 def start():
@@ -53,21 +46,8 @@ def camera():
         if (door[name] > 0.05):
             actualDoor.append(name)
 
-    # check if identified names are homeowners, if so unlock door
-    f = open("homeowners.txt", "r")
-    for line in f:
-        line = line.rstrip()
-        for names in actualDoor:
-            if (line == names):
-                lock_module.open_lock()
-                requests.post('http://3.19.39.220/lock', data={'lock':'false'})
-
     # convert list to string
-    stringname = ",".join(actualDoor)
-    print(stringname)
-
-    requests.post('http://3.19.39.220/names', data={'name':stringname})
-    
+    stringname = ", ".join(actualDoor)
 
     # check man at door and if he/she is home owner
     return render_template('demo.html', name=stringname)
@@ -76,12 +56,10 @@ def camera():
 def user():
     if request.method == "POST":
         if request.form["button"] == "lock":
-            lock_module.lock_lock()
-            requests.post('http://3.19.39.220/lock', data={'lock':'true'})
+            requests.post('http://3.19.39.220/lock', params={'lock':'true'})
             return redirect(url_for('user'))
         elif request.form["button"] == "unlock":
-            lock_module.open_lock()
-            requests.post('http://3.19.39.220/lock', data={'lock':'false'})
+            requests.post('http://3.19.39.220/lock', params={'lock':'false'})
             return redirect(url_for('user'))
         elif request.form["button"] == 'camera':
             return redirect(url_for('camera'))
@@ -93,8 +71,9 @@ def user():
             return redirect(url_for('homeowner'))
             
     else: 
-        state = lock_module.check_lock_status()
-        return render_template('lock.html', lock_status = state)
+        state = requests.get('http://3.19.39.220/status', params="lock")
+        status = state.text
+        return render_template('lock.html', lock_status = status)
 
 @app.route("/add", methods=["GET", "POST"])
 def add():
