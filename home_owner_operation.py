@@ -12,7 +12,6 @@ def print_owners():
     
     return output_string
     
-
 def delete_owner(name):
     with open("homeowners.txt", "r") as f:
         lines = f.readlines()

@@ -11,8 +11,9 @@ import pickle
 import time
 import cv2
 import os
-
-import info_processing
+import json_operations
+import requests
+import lock_module
 
 def process_video(need_to_learn, detector, embedding_model, recognizer, le, expected_confidence):
 
@@ -43,7 +44,12 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 	# start the FPS throughput estimator
 	fps = FPS().start()
 
-	identify_record = {}
+	# loop counters
+	time_counter = 0
+	name_probability = {}
+	dictCounter = 0
+	sentCounter = 0
+	repeat = 0
 
 	# loop over frames from the video file stream
 	while True:
@@ -101,11 +107,47 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 				proba = preds[j]
 				name = le.classes_[j]
 
-				name_str = str(name)
-				if name_str in identify_record:
-					identify_record[name_str] = identify_record[name_str] + proba
-				else:
-					identify_record[name_str] = proba
+				# remember names/probability
+				if time_counter % 1 == 0:
+					if (name in name_probability):
+						name_probability[name] += proba
+					else:
+						name_probability[name] = proba	
+					dictCounter += 1
+
+				# sends post after a timeframe has passed
+				if time_counter % 5 == 0 and repeat == 0:
+					for name in name_probability:
+						name_probability[name] = name_probability[name]/dictCounter
+
+					json_operations.writeToJSONFile('people_count', name_probability)
+					name_probability.clear()
+					dictCounter = 0
+
+					door = json_operations.readFromJSONFile('people_count')
+
+					# only takes names with probability higher than [0.x]
+					actualDoor = []
+					for name in door:
+						if (door[name] > 0.20 and name != 'unknown'):
+							actualDoor.append(name)
+						elif (door[name] > 0.30):
+							actualDoor.append(name)
+
+					# check if identified names are homeowners, if so unlock door
+					f = open("homeowners.txt", "r")
+					for line in f:
+						line = line.rstrip()
+						for names in actualDoor:
+							if (line == names):
+								lock_module.open_lock()
+
+					# convert list to string
+					stringname = ",".join(actualDoor)
+					print(stringname)
+					
+					sentCounter = 1
+					repeat = 1
 
 				# draw the bounding box of the face along with the
 				# associated probability
@@ -116,8 +158,18 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 				cv2.putText(frame, text, (startX, y),
 					cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
+		# no one at the door
+		if sentCounter == 0 and time_counter % 20 == 0:
+			print('no one')
+		elif sentCounter == 1 and time_counter % 20 == 0:
+			sentCounter = 0
+
 		# update the FPS counter
 		fps.update()
+
+		# counter increase
+		time_counter = time_counter + 1
+		repeat = 0
 
 		# show the output frame
 		cv2.imshow("Frame", frame)
@@ -126,11 +178,6 @@ def process_video(need_to_learn, detector, embedding_model, recognizer, le, expe
 		# if the `q` key was pressed, break from the loop
 		if key == ord("q"):
 			break
-
-		info_processing.process_camera_detection(identify_record)
-		identify_record = {}
-
-		time.sleep(2)
 
 	# stop the timer and display FPS information
 	fps.stop()

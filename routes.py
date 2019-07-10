@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, session
 import recognize_video
 import build_face_dataset
-import lock_module
 import json_operations
 import home_owner_operation
-
+import lock_module
+import requests
 import argparse
 
 app = Flask(__name__)
@@ -36,15 +36,22 @@ def camera():
 
         need_to_learn = args["relearn"]
 
-        identified_record = recognize_video.process_video(need_to_learn,"face_detection_model",
+        recognize_video.process_video(need_to_learn,"face_detection_model",
             "openface_nn4.small2.v1.t7","output/recognizer.pickle","output/le.pickle",0.5)
 
-    door = json_operations.readFromJSONFile('whos_at_door')
+    door = json_operations.readFromJSONFile('people_count')
 
-    lock_module.lock_logic()
+    # only takes names with probability higher than [0.x]
+    actualDoor = []
+    for name in door:
+        if (door[name] > 0.05):
+            actualDoor.append(name)
+
+    # convert list to string
+    stringname = ", ".join(actualDoor)
 
     # check man at door and if he/she is home owner
-    return render_template('demo.html', name=list(door.keys())[0])
+    return render_template('demo.html', name=stringname)
 
 @app.route("/user", methods=["GET", "POST"])
 def user():
@@ -63,7 +70,6 @@ def user():
             return redirect(url_for('add'))
         elif request.form["button"] == 'remove':
             return redirect(url_for('homeowner'))
-            
     else: 
         state = lock_module.check_lock_status()
         return render_template('lock.html', lock_status = state)
@@ -85,19 +91,6 @@ def add():
             return redirect(url_for('user'))
 		
     return render_template('add.html')
-
-@app.route("/lock")
-def lock():
-	state = lock_module.check_lock_status()
-	return render_template('lock.html', lock_status = state)
-
-@app.route('/update_lock/<state>', methods=["PUT"])
-def update_lock(state):
-    if (state == 'open'):
-        lock_module.open_lock()
-    if (state == 'lock'):
-        lock_module.lock_lock()
-    return state
 
 @app.route('/homeowner', methods=['GET','POST'])
 def homeowner():
