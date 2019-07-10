@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>RSE Project</title>
+    
+    <script src="https://use.typekit.net/kxf0iwn.js"></script>
+	<script>try{Typekit.load({ async: true });}catch(e){}</script>
+	<meta http-equiv="refresh" content="10">
+
+    <link type='text/css' href='{{ url_for('static', filename='style_user.css') }}' rel='stylesheet'>
+	<!link type='text/css' href='style_user.css' rel='stylesheet'>
+</head>
+
+<body>
+	
+	<header>
+        <nav class="site-nav">
+            <ul>
+                <li><a href="home">Home</a></li>
+                <li><a href="user">Dashboard</a></li>
+				<li><a href="add">Users</a></li>
+                <li><a href="camera">Camera</a></li>
+            </ul>
+        </nav>
+    </header>
+	
+	<main>
+		<section class="title">
+				<h1>User Homepage</h1>
+		</section>
+		
+		<section class="lock">
+
+			<div class="lock-content">
+				<h2>Lock Status</h2>
+				{% if 'Locked' in lock_status %}
+					<figure>
+                    	<img src="static/locked.png">
+                    </figure>
+					<p> The door is locked </p>
+				{% elif 'Unlocked' in lock_status %}
+					<figure>
+                    	<img src="static/unlocked.png">
+                    </figure>
+					<p> The door is unlocked </p>
+				{% elif 'disconnected' in lock_status %}
+					<figure>
+						<img src="static/disconnected.png">
+					</figure>
+					<p> Connection Lost </p>
+				{% endif %}
+			</div>
+				<form method="POST">
+					<button class="lock-button1" name="button" type="submit" value = "lock">Lock</button>
+					<button class="lock-button2" name="button" type="submit" value ="unlock">Unlock</button>
+				</form>	
+		</section>
+		
+		<section class="camera">
+			<div class="camera-content">
+				<h2>Camera</h2>
+			</div>
+			<form method="POST">
+				<button class="camera-button" name="button" type="submit" value = "camera">Camera</button>
+			</form>
+
+		</section>
+		
+		<section class="add">
+			<div class="add-content">
+				<h2>Add Users</h2>
+			</div>
+			
+			<form method="POST">
+				<button class="add-button" name="button" type="submit" value = "add">Add User</button>
+			</form>
+
+		</section>
+		
+		<section class="remove">
+			<div class="remove-content">
+				<h2>Homeowners</h2>
+			</div>
+			
+			<form method="POST">
+				<button class="remove-button" name="button" type="submit" value = "remove">Manage</button>
+			</form>
+
+		</section>
+		
+		<section class="back">
+			<form method="POST">
+				<button class="back-button" name="button" type="submit" value = "back">Back</button>
+			</form>
+		</section>
+		
+    </main>
+		
+	<footer>
+    <div class="footer-content">
+            <div class="footer-info">
+                <p class="footer-disclaimer">This is a mock website. Any references to real products are purely coincidental, designed as part of the STEM Leaders' Project. All images belong to their respective copyright owners.</p>
+                <p class="footer-legal">2019 Test Systems Incorporated. Fictional rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+	
+</body>
+</html>
