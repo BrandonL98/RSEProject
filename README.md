@@ -1,5 +1,5 @@
 # RSEProject - Smart Door Unlock
-Developed by Brandon Le, Zhou Cindy, Winston Darmawan, James Zhang, Ann LMing
+Developed by Brandon Le, Zhou Cindy, Winston Darmawan, James Zhang, Lai Ming(Ann) Lam
 
 # Face Detection 
 ## To install opencv 3 on Windows
